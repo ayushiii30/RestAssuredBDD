@@ -1,0 +1,18 @@
+# Maven
+target/
+*.log
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Config file (contains tokens later)
+src/test/resources/config.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test reports
+test-output/
