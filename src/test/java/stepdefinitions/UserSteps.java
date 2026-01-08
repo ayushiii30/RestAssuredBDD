@@ -1,6 +1,8 @@
 package stepdefinitions;
 
 import POJO.UserRequest;
+import org.testng.asserts.SoftAssert;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -15,6 +17,8 @@ import static org.testng.Assert.assertEquals;
 public class UserSteps {
 
    public static  Response response;
+   SoftAssert softAssert = new SoftAssert();
+
 
     @Given("the API base URL is set")
     public void set_base_url() {
@@ -65,19 +69,20 @@ public class UserSteps {
     // ---------------- THEN ----------------
     @Then("the response status code should be {int}")
     public void check_status_code(int statusCode) {
-        assertEquals(response.getStatusCode(), statusCode, "Status code mismatch!");
+        softAssert.assertEquals(response.getStatusCode(), statusCode, "Status code mismatch!");
         ExtentUtil.attachResponse("Response after status code Validation", response);
     }
     @Then("the response should contain user with id {int}")
     public void check_user_id(int id) {
         int responseId = response.jsonPath().getInt("id");
-        assertEquals(responseId, id, "User ID mismatch!");
+        softAssert.assertEquals(responseId, id, "User ID mismatch!");
     }
 
     @Then("the response should contain name {string}")
     public void check_user_name(String name) {
         String responseName = response.jsonPath().getString("name");
-        assertEquals(responseName, name, "User name mismatch!");
+       softAssert.assertEquals(responseName, name, "User name mismatch!");
+       softAssert.assertAll();
     }
     
 }
