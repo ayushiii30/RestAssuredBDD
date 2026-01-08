@@ -7,13 +7,14 @@ import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import utils.ConfigReader;
+import utils.ExtentUtil;
 
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.assertEquals;
 
 public class UserSteps {
 
-    private Response response;
+   public static  Response response;
 
     @Given("the API base URL is set")
     public void set_base_url() {
@@ -65,6 +66,7 @@ public class UserSteps {
     @Then("the response status code should be {int}")
     public void check_status_code(int statusCode) {
         assertEquals(response.getStatusCode(), statusCode, "Status code mismatch!");
+        ExtentUtil.attachResponse("Response after status code Validation", response);
     }
     @Then("the response should contain user with id {int}")
     public void check_user_id(int id) {
@@ -77,4 +79,5 @@ public class UserSteps {
         String responseName = response.jsonPath().getString("name");
         assertEquals(responseName, name, "User name mismatch!");
     }
+    
 }
