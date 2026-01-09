@@ -1,8 +1,6 @@
 package stepdefinitions;
-
 import POJO.UserRequest;
 import org.testng.asserts.SoftAssert;
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -10,41 +8,35 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import utils.ConfigReader;
 import utils.ExtentUtil;
-
 import static io.restassured.RestAssured.*;
 import static org.testng.Assert.assertEquals;
-
-public class UserSteps {
-
-   public static  Response response;
-   SoftAssert softAssert = new SoftAssert();
-
-
+public class UserSteps{
+   private  Response response;
+   SoftAssert softAssert = Hooks.getSoftAssert();
     @Given("the API base URL is set")
     public void set_base_url() {
         RestAssured.baseURI = ConfigReader.getBaseURI();
         System.out.println("Using Base URI: " + RestAssured.baseURI);
     }
-    // ---------------- POST ----------------
+    //POST
     @When("I create a user with name {string}, username {string} and email {string}")
     public void create_user(String name, String username, String email) {
         UserRequest user = new UserRequest();
         user.setName(name);
         user.setUserName(username);
         user.setEmail(email);
-
         response = given()
                 .header("Content-Type", "application/json")
                 .body(user)
                 .post("/users");
     }
-    // ---------------- GET ----------------
+    //  GET 
     @When("I send a GET request to {string}")
     public void send_get_request(String endpoint) {
         response = get(endpoint);
     }
 
-    // ---------------- PUT ----------------
+    //  PUT 
     @When("I update user with id {int} with name {string}")
     public void update_user(int id, String name) {
         UserRequest user = new UserRequest();
@@ -56,7 +48,6 @@ public class UserSteps {
                 .body(user)
                 .put("/users/{id}");
     }
-
     // ---------------- DELETE ----------------
     @When("I delete user with id {int}")
     public void delete_user(int id) {
@@ -65,8 +56,7 @@ public class UserSteps {
                 .header("Content-Type", "application/json")
                 .delete("/users/{id}");
     }
-
-    // ---------------- THEN ----------------
+    //THEN 
     @Then("the response status code should be {int}")
     public void check_status_code(int statusCode) {
         softAssert.assertEquals(response.getStatusCode(), statusCode, "Status code mismatch!");
@@ -77,12 +67,51 @@ public class UserSteps {
         int responseId = response.jsonPath().getInt("id");
         softAssert.assertEquals(responseId, id, "User ID mismatch!");
     }
-
     @Then("the response should contain name {string}")
     public void check_user_name(String name) {
         String responseName = response.jsonPath().getString("name");
        softAssert.assertEquals(responseName, name, "User name mismatch!");
        softAssert.assertAll();
-    }
+       System.out.println("Thread ID: " + Thread.currentThread().getId());
+
+    } 
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
